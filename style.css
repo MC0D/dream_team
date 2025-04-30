@@ -2,3 +2,7 @@ main {
   display: flex;
   flex-direction: column;
 }
+
+#sectionPosts {
+  display: flex;
+}
