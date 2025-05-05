@@ -7,10 +7,6 @@ main {
   flex-direction: column;
 }
 
-body {
-  background-color: red;
-}
-
 #sectionPosts {
   display: flex;
   flex-direction: column;
@@ -54,17 +50,4 @@ body {
 .paginationPostButton.active {
   background-color: white;
   color: black;
-}
-
-#postContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-
-article {
-  width: 18%;
-  background-color: green;
-  color: purple;
 }
