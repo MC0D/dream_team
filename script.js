@@ -104,7 +104,6 @@ sectionUsers.appendChild(partieUsers);
 const nextButtonUsers = document.createElement("button");
 nextButtonUsers.textContent = "Affiche les 5 suivants";
 sectionUsers.appendChild(nextButtonUsers);
-nextButtonUsers.disabled = true;
 
 /* CREATION DE VARIABLE POUR MES FONCTIONS */
 
@@ -114,7 +113,7 @@ let usersPerPage = 5;
 
 /* RECUPERATION DE DONNEES VIA LAPI */
 
-async function usersFetchData() {
+/* async function usersFetchData() {
   const responseUsers = await fetch(
     "https://jsonplaceholder.typicode.com/users"
   );
@@ -122,88 +121,116 @@ async function usersFetchData() {
   dataUsers.forEach((user) => {
     users.push(user.name);
   });
-  displayUsers();
+  displayUsers(dataUsers);
   nextButtonUsers.disabled = false;
 }
-
+ */
 /* AFFICHAGE DES UTILISATEURS */
 
-function displayUsers() {
-  partieUsers.innerHTML = "";
-  let startIndex = (currentPageUsers - 1) * usersPerPage;
-  let endIndex = startIndex + usersPerPage;
-  let usersToShow = users.slice(startIndex, endIndex);
-  usersToShow.forEach((userName) => {
-    const liUsers = document.createElement("li");
-    liUsers.textContent += userName;
-    partieUsers.appendChild(liUsers);
-  });
-}
+async function app() {
+  const baseUrl = "https://jsonplaceholder.typicode.com";
+  const usersFetchData = await fetchData(`${baseUrl}/users`, displayUsers);
+  console.log("blabla", usersFetchData);
 
-/* EVENT SUR LES BOUTONS */
+  function displayUsers(dataUsers) {
+    console.log(dataUsers);
 
-buttonUsers.addEventListener("click", usersFetchData);
-nextButtonUsers.addEventListener("click", () => {
-  currentPageUsers += 1;
-  displayUsers();
-  const totalPages = Math.ceil(users.length / usersPerPage);
-  if (currentPageUsers > totalPages) {
-    currentPage = 1;
+    dataUsers.forEach((user) => {
+      users.push(user.name);
+    });
+    partieUsers.innerHTML = "";
+    let startIndex = (currentPageUsers - 1) * usersPerPage;
+    let endIndex = startIndex + usersPerPage;
+    let usersToShow = users.slice(startIndex, endIndex);
+    usersToShow.forEach((userName) => {
+      const liUsers = document.createElement("li");
+      liUsers.textContent += userName;
+      partieUsers.appendChild(liUsers);
+    });
   }
-});
 
-main.appendChild(sectionComments);
-sectionComments.appendChild(commentsContainer);
-main.appendChild(commentsButtonContainer);
-commentsButtonContainer.appendChild(prevButton);
-commentsButtonContainer.appendChild(nextButton);
+  /* EVENT SUR LES BOUTONS */
 
-let currentPage = 1;
-const commentsPerPage = 20;
-let allComments = [];
+  buttonUsers.addEventListener("click", usersFetchData);
+  nextButtonUsers.addEventListener("click", () => {
+    currentPageUsers += 1;
+    console.log(usersFetchData);
 
-prevButton.addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    displayComments();
-  }
-});
-
-nextButton.addEventListener("click", () => {
-  if (currentPage < Math.ceil(allComments.length / commentsPerPage)) {
-    currentPage++;
-    displayComments();
-  }
-});
-
-async function commentsFetchData() {
-  try {
-    const commentsResponse = await fetch(
-      "https://jsonplaceholder.typicode.com/comments"
-    );
-    if (!commentsResponse.ok) {
-      throw new Error("Network response was not ok");
+    displayUsers(usersFetchData);
+    const totalPages = Math.ceil(users.length / usersPerPage);
+    if (currentPageUsers > totalPages) {
+      currentPage = 1;
     }
-    allComments = await commentsResponse.json();
-    displayComments();
-  } catch (error) {
-    console.error("Error fetching comments:", error);
+  });
+
+  main.appendChild(sectionComments);
+  sectionComments.appendChild(commentsContainer);
+  main.appendChild(commentsButtonContainer);
+  commentsButtonContainer.appendChild(prevButton);
+  commentsButtonContainer.appendChild(nextButton);
+
+  let currentPage = 1;
+  const commentsPerPage = 20;
+  let allComments = [];
+
+  prevButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayComments();
+    }
+  });
+
+  nextButton.addEventListener("click", () => {
+    if (currentPage < Math.ceil(allComments.length / commentsPerPage)) {
+      currentPage++;
+      displayComments();
+    }
+  });
+
+  async function commentsFetchData() {
+    try {
+      const commentsResponse = await fetch(
+        "https://jsonplaceholder.typicode.com/comments"
+      );
+      if (!commentsResponse.ok) {
+        throw new Error("Network response was not ok");
+      }
+      allComments = await commentsResponse.json();
+      displayComments();
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
   }
-}
 
-function displayComments() {
-  commentsContainer.innerHTML = "";
-  const startIndex = (currentPage - 1) * commentsPerPage;
-  const endIndex = startIndex + commentsPerPage;
-  const commentsToDisplay = allComments.slice(startIndex, endIndex);
+  async function fetchData(url, fn) {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      fn(data);
+      console.log(data);
 
-  commentsToDisplay.forEach((comment) => {
-    const commentsElement = document.createElement("article");
-    commentsElement.innerHTML = `
+      return data;
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  }
+
+  function displayComments() {
+    commentsContainer.innerHTML = "";
+    const startIndex = (currentPage - 1) * commentsPerPage;
+    const endIndex = startIndex + commentsPerPage;
+    const commentsToDisplay = allComments.slice(startIndex, endIndex);
+
+    commentsToDisplay.forEach((comment) => {
+      const commentsElement = document.createElement("article");
+      commentsElement.innerHTML = `
       <h3>${comment.name}</h3>
       <p>${comment.body}</p>`;
-    commentsContainer.appendChild(commentsElement);
-  });
+      commentsContainer.appendChild(commentsElement);
+    });
+  }
+
+  commentsFetchData();
 }
 
-commentsFetchData();
+app();
