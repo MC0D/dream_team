@@ -27,8 +27,8 @@ document.body.appendChild(main);
 main.appendChild(sectionPosts);
 sectionPosts.appendChild(postsContainer);
 sectionPosts.appendChild(postsPagination);
-postsPagination.appendChild(postsNextButton);
 postsPagination.appendChild(postsPrevButton);
+postsPagination.appendChild(postsNextButton);
 
 // ID
 sectionPosts.id = "sectionPosts";
@@ -96,22 +96,6 @@ sectionUsers.appendChild(nextButtonUsers);
 let users = [];
 let currentPageUsers = 1;
 let usersPerPage = 5;
-
-/* RECUPERATION DE DONNEES VIA LAPI */
-
-/* async function usersFetchData() {
-  const responseUsers = await fetch(
-    "https://jsonplaceholder.typicode.com/users"
-  );
-  const dataUsers = await responseUsers.json();
-  dataUsers.forEach((user) => {
-    users.push(user.name);
-  });
-  displayUsers(dataUsers);
-  nextButtonUsers.disabled = false;
-}
- */
-/* AFFICHAGE DES UTILISATEURS */
 
 async function app() {
   let currentPage = 1;
@@ -224,21 +208,6 @@ async function app() {
     }
   });
 
-  /*   async function commentsFetchData() {
-    try {
-      const commentsResponse = await fetch(
-        "https://jsonplaceholder.typicode.com/comments"
-      );
-      if (!commentsResponse.ok) {
-        throw new Error("Network response was not ok");
-      }
-      allComments = await commentsResponse.json();
-      displayComments();
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  } */
-
   async function fetchData(url, fn) {
     try {
       const response = await fetch(url);
@@ -251,24 +220,5 @@ async function app() {
       console.error("Error fetching comments:", error);
     }
   }
-
-  /*  function displayUsers(dataUsers) {
-    console.log(dataUsers);
-
-    dataUsers.forEach((user) => {
-      users.push(user.name);
-    });
-    partieUsers.innerHTML = "";
-    let startIndex = (currentPageUsers - 1) * usersPerPage;
-    let endIndex = startIndex + usersPerPage;
-    let usersToShow = users.slice(startIndex, endIndex);
-    usersToShow.forEach((userName) => {
-      const liUsers = document.createElement("li");
-      liUsers.textContent += userName;
-      partieUsers.appendChild(liUsers);
-    });
-  } */
-
-  /*commentsFetchData(); */
 }
 app();
