@@ -3,6 +3,23 @@ main {
   flex-direction: column;
 }
 
+body {
+  background-color: red;
+}
+
 #sectionPosts {
   display: flex;
+}
+
+#postContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+article {
+  width: 18%;
+  background-color: green;
+  color: purple;
 }
