@@ -1,11 +1,3 @@
-/* 3. Membre 1 - Récupérer et afficher les utilisateurs (5 utilisateurs avec pagination) :
-
-    Utilisez l'API https://jsonplaceholder.typicode.com/users.
-    Affichez les 5 premiers utilisateurs sur la page.
-    Ajoutez des boutons de pagination pour charger les utilisateurs suivants (affichage de 5 utilisateurs par page). Lorsqu'on clique sur le bouton "Suivant", les 5 utilisateurs suivants doivent être chargés. */
-
-/* CREATION DE LA STRUCTURE HTML */
-
 const main = document.createElement("main");
 document.body.appendChild(main);
 const sectionUsers = document.createElement("section");
@@ -61,4 +53,8 @@ buttonUsers.addEventListener("click", usersFetchData);
 nextButtonUsers.addEventListener("click", () => {
   currentPageUsers += 1;
   displayUsers();
+  const totalPages = Math.ceil(users.length / usersPerPage);
+  if (currentPageUsers > totalPages) {
+    currentPage = 1;
+  }
 });
