@@ -133,6 +133,7 @@ function displayUsers() {
   let startIndex = (currentPageUsers - 1) * usersPerPage;
   let endIndex = startIndex + usersPerPage;
   let usersToShow = users.slice(startIndex, endIndex);
+  
   usersToShow.forEach((userName) => {
     const liUsers = document.createElement("li");
     liUsers.textContent += userName;
